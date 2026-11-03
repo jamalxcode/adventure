@@ -236,7 +236,7 @@ function nearestInteraction(){
   setFlag('SANCTUARY');msg('Sanctuary activated. The kingdom remembers your progress.');});
  if(room===6)core(2,2,'Examine Yorgle collar',()=>{
   setFlag('COLLAR');msg('The dragon wears a broken magical collar. Who bound the dragons?');
-  if(!flag('YORGLE_TRUST')&&holding('treasure')){drop();setFlag('YORGLE_TRUST');msg('Yorgle recognizes the returned treasure and trusts you!');}
+  if(!flag('YORGLE_TRUST')&&!flag('YORGLE_DEAD')&&holding('treasure')){drop();setFlag('YORGLE_TRUST');msg('Yorgle recognizes the returned treasure and trusts you!');}
  });
  if(room===7)core(0,1,"Search Blinky's hoard",()=>{
   setFlag('BAT');msg('Blinky once worked for the Sorcerer. He keeps stealing useful objects.');});
@@ -260,7 +260,7 @@ function nearestInteraction(){
  if(room===18){
   core(0,1,'Activate second shadow seal',()=>{
   setFlag('SEAL2');msg('Shadow seal two disabled.');});
-  if(flag('BLUEPRINT')&&flag('CHALICE')&&!flag('RHINDLE_TRUST'))core(3,1,'Show Chalice symbol to Rhindle',()=>{setFlag('RHINDLE_TRUST');msg('Rhindle recognizes the new pact. You have earned his trust.');});
+  if(flag('BLUEPRINT')&&flag('CHALICE')&&!flag('RHINDLE_TRUST')&&!flag('RHINDLE_DEAD'))core(3,1,'Show Chalice symbol to Rhindle',()=>{setFlag('RHINDLE_TRUST');msg('Rhindle recognizes the new pact. You have earned his trust.');});
  }
  if(room===19){
   core(0,2,'Confront the Shadow Sorcerer',()=>{
@@ -390,7 +390,7 @@ function tick(dt){
   const gate=targetRoom===1?'GOLDEN_OPEN':targetRoom===9?'WHITE_OPEN':targetRoom===19?'BLACK_OPEN':null;
   const blocked=false; // Prototype keeps all regions reachable; locked objectives still require their gates.
   if(!blocked){p.x=nx;p.z=nz;}else if(gameTime>lastSave+1){msg('Castle sealed. Find the matching key and interact at the gate.');}
-  hero.rotation.y=Math.atan2(dx,dz);hero.position.set(p.x,0,p.z);
+  hero.rotation.y=Math.atan2(dx,dz);hero.position.set(p.x,Math.sin(gameTime*12)*.045,p.z);
  }
  // Room entry/door proximity and soft recovery visible in minimap.
  moveActors(dt);
