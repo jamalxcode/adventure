@@ -37,3 +37,7 @@ Observe unfamiliar players without hints. Measure onboarding completion, puzzle 
 
 ## Definition of done
 Each mechanic requires actual running implementation and documented test evidence. Writing a specification does not count as gameplay completion.
+
+
+## v1.2 clarification
+The [v1.2 consistency audit](CONSISTENCY_AUDIT_V1_2.md) supersedes older ambiguities. First playable slice requires three optional secrets, even though an earlier vertical-slice paragraph mentions one. Endgame has separate arrival, choice and completion states. Finale checkpoints, trust prerequisites, item ownership and seeded-world solvability must be tested according to v1.2.
