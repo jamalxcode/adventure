@@ -928,7 +928,7 @@ function tick(dt) {
   hero.position.set(p.x, 0, p.z);
   const cur = hero.rotation.y, diff = Math.atan2(Math.sin(H.face - cur), Math.cos(H.face - cur));
   hero.rotation.y = cur + diff * Math.min(1, dt * 14);
-  animateHero(heroParts, { moving: H.moving || H.dodgeT >= 0, speed: H.speed, time: gameTime, attack: H.attackT, dodge: H.dodgeT, carrying: !!state.held && !holding('sword') });
+  animateHero(heroParts, { moving: H.moving || H.dodgeT >= 0, speed: H.speed, time: gameTime, attack: H.attackT, dodge: H.dodgeT, carrying: !!state.held && !holding('sword'), hurt: H.invuln > 0.5 && H.dodgeT < 0 });
   const hidden = heroHidden();
   showMesh(heroParts.body, hidden ? 0.5 : H.invuln > 0 && Math.floor(gameTime * 12) % 2 ? 0.4 : 1);
 
@@ -960,6 +960,7 @@ function tick(dt) {
       m.root.rotation.y = c + df * Math.min(1, dt * 8);
     }
     animateDragon(m, d, gameTime, kit);
+    outlineNear(m.root, d.x, d.z);
   }
 
   // Karl
@@ -978,6 +979,7 @@ function tick(dt) {
   const kDist = Math.hypot(karl.x - p.x, karl.z - p.z);
   animateKarl(karlModel, karl, gameTime, holding('crystal') || karl.state === 'stunned' ? 1 : kDist < 2.5 ? 0.55 : karl.state === 'flee' ? 0.35 : 0.13);
 
+  outlineNear(sorcerer.root, SORCERER_POINT.x, SORCERER_POINT.z);
   updateBoss(dt); updateEscape(dt); syncDoors(dt); syncItems();
   sealMeshes.SEAL1.setEnabled(!flag('SEAL1')); sealMeshes.SEAL2.setEnabled(!flag('SEAL2'));
   Object.values(sealMeshes).forEach(s => { s.rotation.y = gameTime * 1.5; s.rotation.x = Math.sin(gameTime) * 0.3; });
@@ -998,6 +1000,14 @@ function tick(dt) {
   if (gameTime > msgUntil) notice.style.opacity = '0';
   renderHud();
   if (Math.floor(state.playSeconds / 15) !== Math.floor((state.playSeconds - dt) / 15)) save();
+}
+
+// Comic outlines cost an extra pass per mesh, so only draw them on characters near the hero.
+function outlineNear(root, x, z) {
+  const on = Math.hypot(x - state.hero.x, z - state.hero.z) < 25;
+  if (root._inkOn === on) return;
+  root._inkOn = on;
+  root.getChildMeshes().forEach(m => { if (!m.name.startsWith('ink-') && m.name !== 'marker' && m.name !== 'shield') m.renderOutline = on; });
 }
 
 // Fade anything that stands between the camera and the hero.

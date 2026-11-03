@@ -5,7 +5,7 @@
 | World | Done for prototype | 20 rooms, walls and doorways, 3 gated castles, cracked wall, light seal, river and bridge |
 | Collision | Done | Hero, dragons and Karl collide with walls, props, trees, river; hero can't walk through dragons. No jumping or falling yet |
 | Camera | Done | Orbit/zoom, smooth follow, walls and trees between camera and hero fade out |
-| Hero | Done | Jointed model, walk/sprint/attack/dodge animations, carried item shown in hand |
+| Hero | Done | Comic-strip style jointed model (dragons, Karl and the Sorcerer match), walk/sprint/attack/dodge animations, carried item shown in hand |
 | Dragons | Done | Sight cone, hearing, line of sight, hiding in grass, chase across rooms, telegraphed strikes, stun, 3-hit defeat, return home, friendship |
 | Karl the Kameleon | Done | Camouflage, stalking, stealing, stashing at lookout, revealed by crystal, sword makes him drop items |
 | Puzzles | Done | Mirror beam (2 solutions), forge levers (order per save), river bridge, cracked wall via Green Dragon |

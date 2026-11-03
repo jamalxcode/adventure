@@ -12,6 +12,7 @@ outwit Karl the Kameleon, and decide the fate of the Gold, Green and Red Dragons
 - **Karl the Kameleon**, a nearly invisible thief who steals what you carry and runs to his lookout. The Crystal of Truth reveals him.
 - **Real puzzles:** a Mirror Hall light-beam puzzle (two solutions), forge levers whose order changes per save, a river crossing, and luring the Green Dragon into the cracked wall.
 - **Finale:** a Shadow Sorcerer boss (dodge shadow orbs, break three pylons), a castle-collapse escape with the Red Dragon in pursuit, and three endings.
+- Comic-strip style characters: big round heads, dot eyes, expressive brows and mouths, dark outlines.
 - Dodge roll, sword combat with animation, interaction prompts, sanctuary checkpoint, three secrets.
 - Saves in the browser with automatic backup; touch controls with analog stick; quality adapts to slower devices.
 - Optional music files (for example made with Suno) in `src/audio/`; see [src/audio/README.md](src/audio/README.md).

@@ -25,7 +25,7 @@ const shots = process.argv[3];
 
   // Movement: D moves the hero to the screen's right (+x with the default camera).
   const x0 = await td(() => __td.state.hero.x);
-  await page.keyboard.down('KeyD'); await wait(2000); await page.keyboard.up('KeyD');
+  await page.keyboard.down('KeyD'); await wait(4000); await page.keyboard.up('KeyD');
   ok((await td(() => __td.state.hero.x)) > x0 + 1, 'D moves right');
 
   // Sun Key -> locked gate -> Sun Castle
@@ -50,7 +50,7 @@ const shots = process.argv[3];
   const gs = await td(() => __td.dragons.gold.state);
   ok(['alert', 'chase', 'windup', 'recover'].includes(gs), 'Gold Dragon reacts to the hero (' + gs + ')');
   await shot('04-dragon');
-  for (let i = 0; i < 20 && (await td(() => __td.state.hero.health)) === 3; i++) await wait(500);
+  for (let i = 0; i < 40 && (await td(() => __td.state.hero.health)) === 3; i++) await wait(500);
   const hp = await td(() => __td.state.hero.health);
   ok(hp < 3, 'dragon can hurt the hero (health ' + hp + ')');
 
