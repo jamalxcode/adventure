@@ -1,4 +1,5 @@
 import './style.css';
+import { endingEligibility, mayEarnTrust, inventoryConsistent } from './rules.mjs';
 import {
  Engine, Scene, ArcRotateCamera, HemisphericLight, DirectionalLight, Vector3,
  MeshBuilder, StandardMaterial, Color3, TransformNode, ShadowGenerator
@@ -30,7 +31,7 @@ const cellOf=(x,z)=>Math.max(0,Math.min(19,
  Math.floor(Math.min(4.9999,Math.max(0,(x+45)/18)))));
 const inCell=id=>cellOf(state.hero.x,state.hero.z)===id;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-function save(){try{localStorage.setItem(K,JSON.stringify(state));}catch(e){msg('Saving is blocked in this browser. Use a normal browser window.');}}
+function save(){try{if(!inventoryConsistent(state.items,state.held)){console.warn('Invalid item ownership. Save deferred.');return;}localStorage.setItem(K,JSON.stringify(state));}catch(e){msg('Saving is blocked in this browser. Use a normal browser window.');}}
 function load(){try{const s=JSON.parse(localStorage.getItem(K)||'null');if(s&&s.v===2&&s.hero&&s.items&&s.flags){state=s;state.hero.health=clamp(+state.hero.health||3,1,3);}}catch(e){state=DEFAULT();}}
 function msg(t,duration=4){notice.textContent=t;notice.style.opacity='1';infoTime=gameTime+duration;}
 function sound(kind){
@@ -236,7 +237,7 @@ function nearestInteraction(){
   setFlag('SANCTUARY');msg('Sanctuary activated. The kingdom remembers your progress.');});
  if(room===6)core(2,2,'Examine Yorgle collar',()=>{
   setFlag('COLLAR');msg('The dragon wears a broken magical collar. Who bound the dragons?');
-  if(!flag('YORGLE_TRUST')&&!flag('YORGLE_DEAD')&&holding('treasure')){drop();setFlag('YORGLE_TRUST');msg('Yorgle recognizes the returned treasure and trusts you!');}
+  if(mayEarnTrust(state.flags,'YORGLE')&&holding('treasure')){drop();setFlag('YORGLE_TRUST');msg('Yorgle recognizes the returned treasure and trusts you!');}
  });
  if(room===7)core(0,1,"Search Blinky's hoard",()=>{
   setFlag('BAT');msg('Blinky once worked for the Sorcerer. He keeps stealing useful objects.');});
@@ -248,7 +249,7 @@ function nearestInteraction(){
   setFlag('MURAL');msg('The Chalice controlled the dragons. The truth has been hidden.');});
  if(room===14)core(0,0,'Redirect magical mirrors',()=>{
   setFlag('MIRRORS');msg('Mirrors align! The ancient binding spell weakens.');
-  if(!flag('GRUNDLE_TRUST')&&flag('WHITE_OPEN')&&!flag('GRUNDLE_DEAD')){
+  if(mayEarnTrust(state.flags,'GRUNDLE')&&flag('WHITE_OPEN')){
    setFlag('GRUNDLE_TRUST');msg('Grundle is free. He will help defend the kingdom.');}
  });
  if(room===13)core(0,3,'Restart the ancient forge',()=>{
@@ -260,7 +261,7 @@ function nearestInteraction(){
  if(room===18){
   core(0,1,'Activate second shadow seal',()=>{
   setFlag('SEAL2');msg('Shadow seal two disabled.');});
-  if(flag('BLUEPRINT')&&flag('CHALICE')&&!flag('RHINDLE_TRUST')&&!flag('RHINDLE_DEAD'))core(3,1,'Show Chalice symbol to Rhindle',()=>{setFlag('RHINDLE_TRUST');msg('Rhindle recognizes the new pact. You have earned his trust.');});
+  if(flag('BLUEPRINT')&&flag('CHALICE')&&mayEarnTrust(state.flags,'RHINDLE'))core(3,1,'Show Chalice symbol to Rhindle',()=>{setFlag('RHINDLE_TRUST');msg('Rhindle recognizes the new pact. You have earned his trust.');});
  }
  if(room===19){
   core(0,2,'Confront the Shadow Sorcerer',()=>{
@@ -295,7 +296,8 @@ function interact(){
 function endingMenu(){
  if(!flag('CHALICE')||!holding('chalice'))return;
  paused=true;keys.clear();activeOverlay='ending';
- const free=flag('BLUEPRINT'),united=free&&flag('FORGE')&&flag('YORGLE_TRUST')&&flag('GRUNDLE_TRUST')&&flag('RHINDLE_TRUST');
+ const eligibility=endingEligibility({...state.flags,CHALICE_AT_GOLDEN_PEDESTAL:true});
+ const free=eligibility.free,united=eligibility.united;
  $('overlay').classList.remove('hidden');
  $('overlay').innerHTML='<section class="dialog"><h1>The Kingdom’s Choice</h1><p>The Chalice can restore the old magic. What should Atheon become?</p>'+
  '<button data-ending="Old Kingdom">Restore the old kingdom</button>'+
