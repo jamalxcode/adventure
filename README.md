@@ -18,3 +18,11 @@ npm run dev
 Build: `npm run build`.
 
 The preview uses procedural placeholder meshes. It is **not** complete gameplay. 3D assets and music must be produced separately. After the first install, commit `package-lock.json` and switch the workflow from `npm install` to `npm ci` for reproducible deployments.
+
+## Detailed implementation specifications (reviewed 2026-11-03)
+
+- [Gameplay rules, creature AI, object recovery, endings and save schema](docs/GAMEPLAY_RULES_V1_1.md)
+- [Visual art, animation, audio, UI and localization bible](docs/ART_AUDIO_UI_BIBLE.md)
+- [Vertical slice scope, production roadmap and acceptance tests](docs/PRODUCTION_ACCEPTANCE_V1_1.md)
+
+These documents define how to implement the game. The current scene is a technology preview, not a completed game. Gameplay tuning values are provisional and require player testing.
