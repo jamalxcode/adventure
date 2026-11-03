@@ -211,9 +211,9 @@ function hudUpdate(){
  const mini=locations.map(l=>'<span class="mini '+(l.id===room?'here':'')+
   '" title="'+l.name+'">'+(l.id===room?'●':(['G','W','B'].includes(l.name[0])?l.name[0]:'·'))+'</span>').join('');
  hud.innerHTML='<div class="game-brand">THE LOST CHALICE <small>PLAYABLE 3D PROTOTYPE</small></div>'+
- '<div class="hudline"><strong>♥ '.repeat(state.hero.health)+'</strong><span>'+at(room).name+'</span><span>✦ '+state.score+'</span></div>'+
+ '<div class="hudline"><strong>'+'♥ '.repeat(state.hero.health)+'</strong><span>'+at(room).name+'</span><span>✦ '+state.score+'</span></div>'+
  '<p class="objective">'+questLabel()+'</p>'+
- '<p class="carrying">Carrying: '+(held?held.label:'Nothing')+' · E interact · Q drop · F map · H help · Esc pause</p>'+
+ '<p class="carrying">Carrying: '+(held?held.label:'Nothing')+' · E interact · Q drop · J attack · F map · H help</p>'+
  '<div class="minimap" aria-label="Room map">'+mini+'</div>';
 }
 function nearestInteraction(){
@@ -279,6 +279,14 @@ function nearestInteraction(){
  if(room===10)core(0,0,'Discover river treasure',()=>{setFlag('SECRET2');msg('SECRET FOUND: sunken royal crest.');});
  if(room===15)core(0,0,'Discover hidden path',()=>{setFlag('SECRET3');msg('SECRET FOUND: forgotten garden.');});
  choices.sort((a,b)=>a.d-b.d);return choices[0];
+}
+function attack(){
+ if(!holding('sword')){msg('Carry the sword before attacking.');return;}
+ const target=actors.filter(a=>!flag(a.id.toUpperCase()+'_DEAD')&&dist(a.root.position,state.hero)<4).sort((a,b)=>dist(a.root.position,state.hero)-dist(b.root.position,state.hero))[0];
+ if(!target){msg('Swing! No dragon close enough to strike.');sound('key');return;}
+ if(flag(target.id.toUpperCase()+'_TRUST')){msg(target.id+' is your friend. You lower the sword.');return;}
+ setFlag(target.id.toUpperCase()+'_DEAD');target.root.setEnabled(false);state.score+=150;
+ msg(target.id+' defeated. A nonviolent solution would have been possible.');save();hudUpdate();sound('win');
 }
 function interact(){
  const target=nearestInteraction();if(!target){msg('No object in reach. Explore the next room.');return;}
@@ -395,10 +403,11 @@ function bind(){
  window.addEventListener('keydown',e=>{
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code))e.preventDefault();
   if(['INPUT','TEXTAREA'].includes(document.activeElement?.tagName))return;
-  if(e.repeat&&['KeyE','KeyQ','KeyF','KeyH','Escape','KeyM'].includes(e.code))return;
+  if(e.repeat&&['KeyE','KeyQ','KeyJ','KeyF','KeyH','Escape','KeyM'].includes(e.code))return;
   if(e.code==='Escape'){activeOverlay?closeOverlay():overlay('pause');return;}
   if(activeOverlay)return;
   if(e.code==='KeyE')interact();
+  else if(e.code==='KeyJ')attack();
   else if(e.code==='KeyQ')drop();
   else if(e.code==='KeyF')overlay('map');
   else if(e.code==='KeyH')overlay('help');
@@ -409,6 +418,7 @@ function bind(){
  window.addEventListener('blur',()=>{keys.clear();if(!paused)overlay('pause');});
  document.addEventListener('visibilitychange',()=>{if(document.hidden){keys.clear();if(!paused)overlay('pause');}});
  $('interact').onclick=()=>{if(!activeOverlay)interact();};
+ $('attack').onclick=()=>{if(!activeOverlay)attack();};
  $('drop').onclick=()=>{if(!activeOverlay)drop();};
  $('map').onclick=()=>overlay('map');
  $('help').onclick=()=>overlay('help');
@@ -430,6 +440,8 @@ function boot(){
  creature('Yorgle',6,'#F1BF49');creature('Grundle',8,'#36A56F');creature('Rhindle',18,'#B94C4D');
  bat=batModel();objectMeshes();startState();bind();
  window.addEventListener('resize',()=>engine.resize());
+ window.addEventListener('beforeunload',save);
+ canvas.addEventListener('contextmenu',e=>e.preventDefault());
  let lastTime=performance.now();
  engine.runRenderLoop(()=>{
   const now=performance.now(),dt=Math.min(.05,(now-lastTime)/1000);lastTime=now;
