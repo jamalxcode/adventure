@@ -191,7 +191,7 @@ function updateObjects(){
  });
 }
 function questLabel(){
- if(state.ending)return 'Adventure complete: '+state.ending;
+ if(state.ending)return 'Adventure complete: '+state.ending+'. Explore or start a new adventure.';
  if(!flag('GOLDEN_OPEN'))return 'Find golden key and open Golden Castle';
  if(!flag('SANCTUARY'))return 'Activate the golden pedestal';
  if(!flag('COLLAR'))return 'Investigate Yorgle in the forest';
@@ -231,7 +231,7 @@ function nearestInteraction(){
    spendKey(gate.key);setFlag(gate.flag);msg(gate.name+' unlocked!');});
  }
  const room=cellOf(p.x,p.z),a=at(room);const core=(x,z,txt,fn)=>add(a.x+x,a.z+z,8,txt,fn);
- if(room===1)core(0,-3,'Activate Golden Sanctuary',()=>{
+ if(room===1&&!holding('chalice'))core(0,-3,'Activate Golden Sanctuary',()=>{
   if(!flag('GOLDEN_OPEN')){msg('The Golden Castle is sealed. Find the sun key.');return;}
   setFlag('SANCTUARY');msg('Sanctuary activated. The kingdom remembers your progress.');});
  if(room===6)core(2,2,'Examine Yorgle collar',()=>{
