@@ -1,5 +1,5 @@
 # ADVENTURE: THE LOST CHALICE
-## Game Design and Technical Specification v1.0 — 3 November 2026
+## Game Design and Technical Specification v1.1 — 3 November 2026
 
 **Status:** Preproduction design. The scaffold in this repository is a 3D technology preview, not the complete adventure.
 
@@ -122,3 +122,12 @@ Acceptance: a first-time tester can play without reading the design document; qu
 
 ### 14. Licensing
 Atari Adventure serves as historical inspiration. Do not copy copyrighted artwork, proprietary Roblox assets, soundtrack, character models or third-party game level maps. Original kingdom, character designs, names, sound recordings and assets must be owned or suitably licensed before public distribution.
+
+
+### 15. Implementation addendum (2026-11-03)
+The following documents are normative for implementation and resolve gaps in this overview:
+- [Gameplay rules](GAMEPLAY_RULES_V1_1.md): player movement, one-object ownership, creature state machines, theft/recovery grace, quests and ending eligibility, save schema and mandatory puzzle fallbacks.
+- [Art/audio/UI bible](ART_AUDIO_UI_BIBLE.md): 3D visual language, model and animation deliverables, sound triggers, UI, accessibility and localization.
+- [Production acceptance](PRODUCTION_ACCEPTANCE_V1_1.md): vertical slice, architecture, test gates and measured performance.
+
+**Conflict resolution:** when this introductory overview is less specific, follow the v1.1 implementation addenda. In particular, United Kingdom requires BLUEPRINT_FOUND, FORGE_RESTORED and trust of **all three** dragons. The early playable prototype Chalice is an isolated short test quest; the full story retrieves the real Chalice in the Black Castle. All numerical gameplay balancing values are provisional until tested.
