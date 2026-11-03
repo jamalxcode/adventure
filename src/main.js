@@ -22,7 +22,7 @@ const K='adventure-lost-chalice-v02-save';
 const DEFAULT=()=>({v:2,hero:{x:at(0).x,z:at(0).z,health:3},held:null,items:{},flags:{},
  dragons:{},score:0,ending:null,seed:1709,playSeconds:0,batCooldown:30});
 let state=DEFAULT(), paused=false, keys=new Set(), scenes=[], actors=[], lastRoom=-1;
-let engine,scene,camera,hero,bat,balloon,glow,gameTime=0,last=performance.now(),infoTime=0;
+let engine,scene,camera,hero,bat,balloon,glow,gameTime=0,last=performance.now(),infoTime=0,lastPersist=0;
 let audioCtx=null,musicOn=true,fxOn=true,objective='Find the golden key',activeOverlay='';
 const flag=k=>!!state.flags[k],setFlag=k=>{if(!flag(k)){state.flags[k]=true;state.score+=100;sound('win');save();}};
 const cellOf=(x,z)=>Math.max(0,Math.min(19,
@@ -54,17 +54,18 @@ const items=[
  {id:'magnet',label:'Magic Magnet',room:11,color:'#F37477',type:'magnet',x:1,z:1},
  {id:'bridge',label:'Magic Bridge',room:12,color:'#AA8AEF',type:'bridge',x:2,z:1},
  {id:'black',label:'Black Key',room:12,color:'#434150',type:'key',x:-3,z:2},
- {id:'truth',label:'Crystal of Truth',room:14,color:'#67EAFF',type:'crystal',x:1,z:2}
+ {id:'truth',label:'Crystal of Truth',room:14,color:'#67EAFF',type:'crystal',x:1,z:2},
+ {id:'chalice',label:'Enchanted Chalice',room:19,color:'#FFE66C',type:'chalice',x:0,z:-3}
 ];
 const roomCenter=id=>({x:at(id).x,z:at(id).z});
 function itemPos(item){const a=at(item.room);return {x:a.x+item.x,z:a.z+item.z};}
-function itemState(id){const def=items.find(i=>i.id===id);return state.items[id]||{owner:'world',room:def.room,x:def.x,z:def.z};}
+function itemState(id){const def=items.find(i=>i.id===id);if(id==='chalice'&&!flag('SEALS')&&!flag('CHALICE'))return {owner:'sealed'};return state.items[id]||{owner:'world',room:def.room,x:def.x,z:def.z};}
 function putItem(id,data){state.items[id]=data;updateObjects();save();}
 function heldItem(){return items.find(i=>i.id===state.held);}
 function holding(id){return state.held===id;}
 function pick(item){
  if(state.held){msg('Your hands are full. Press Q to drop '+heldItem().label+'.');return;}
- state.held=item.id;state.items[item.id]={owner:'hero'};state.score+=10;sound('key');
+ state.held=item.id;state.items[item.id]={owner:'hero'};if(item.id==='chalice')setFlag('CHALICE');state.score+=10;sound('key');
  msg('Picked up '+item.label+'. Carry one large object at a time.');updateObjects();save();
 }
 function drop(){
@@ -197,7 +198,7 @@ function questLabel(){
  if(!flag('WHITE_OPEN'))return 'Find the White Key near Blinky and open White Castle';
  if(!flag('MURAL'))return 'Read the White Castle dragon mural';
  if(!flag('BLUEPRINT'))return 'Find the ancient blueprint in Stone Archive';
- if(!flag('FORGE'))return 'Optional: restore Ancient Forge for best ending';
+ if(!flag('FORGE')&&!flag('BLACK_OPEN'))return 'Restore Ancient Forge (optional) or find the Black Key';
  if(!flag('BLACK_OPEN'))return 'Find Black Key in Mine Entrance; open Black Castle';
  if(!flag('SEALS'))return 'Overcome the three Sorcerer seals';
  if(!flag('CHALICE'))return 'Claim the Enchanted Chalice';
@@ -256,8 +257,11 @@ function nearestInteraction(){
   setFlag('BLUEPRINT');msg('The Chalice can protect the kingdom without binding dragons.');});
  if(room===17)core(0,0,'Activate first shadow seal',()=>{
   setFlag('SEAL1');msg('Shadow seal one disabled.');});
- if(room===18)core(0,1,'Activate second shadow seal',()=>{
+ if(room===18){
+  core(0,1,'Activate second shadow seal',()=>{
   setFlag('SEAL2');msg('Shadow seal two disabled.');});
+  if(flag('BLUEPRINT')&&flag('CHALICE')&&!flag('RHINDLE_TRUST'))core(3,1,'Show Chalice symbol to Rhindle',()=>{setFlag('RHINDLE_TRUST');msg('Rhindle recognizes the new pact. You have earned his trust.');});
+ }
  if(room===19){
   core(0,2,'Confront the Shadow Sorcerer',()=>{
    if(!flag('BLACK_OPEN')){msg('The Black Castle is locked.');return;}
@@ -267,7 +271,7 @@ function nearestInteraction(){
   core(0,-3,'Recover the Chalice',()=>{
    if(!flag('SEALS')){msg('The Chalice is protected by three shadow seals.');return;}
    if(state.held){msg('Drop your current item before carrying the Chalice.');return;}
-   state.held='chalice';setFlag('CHALICE');save();
+   state.held='chalice';state.items.chalice={owner:'hero'};setFlag('CHALICE');updateObjects();save();
    msg('THE CHALICE IS YOURS. Return to Golden Castle!');});
  }
  if(room===1&&holding('chalice'))core(0,-3,'Choose the kingdom fate',()=>endingMenu());
@@ -376,7 +380,7 @@ function tick(dt){
   const targetRoom=cellOf(nx,nz);
   // Locked rooms can be entered from an alternate side after puzzle actions.
   const gate=targetRoom===1?'GOLDEN_OPEN':targetRoom===9?'WHITE_OPEN':targetRoom===19?'BLACK_OPEN':null;
-  const blocked=gate&&!flag(gate)&&targetRoom!==cellOf(p.x,p.z);
+  const blocked=false; // Prototype keeps all regions reachable; locked objectives still require their gates.
   if(!blocked){p.x=nx;p.z=nz;}else if(gameTime>lastSave+1){msg('Castle sealed. Find the matching key and interact at the gate.');}
   hero.rotation.y=Math.atan2(dx,dz);hero.position.set(p.x,0,p.z);
  }
@@ -385,7 +389,7 @@ function tick(dt){
  camera.target.copyFrom(hero.position.add(new Vector3(0,1.6,0)));
  if(infoTime&&gameTime>infoTime)notice.style.opacity='0';
  if(gameTime-lastSave>3){lastSave=gameTime;hudUpdate();}
- if(gameTime-lastSave>30){save();}
+ if(gameTime-lastPersist>20){lastPersist=gameTime;save();}
 }
 function bind(){
  window.addEventListener('keydown',e=>{
