@@ -1,5 +1,5 @@
 # ADVENTURE: THE LOST CHALICE
-## Game Design and Technical Specification v1.1 — 3 November 2026
+## Game Design and Technical Specification v1.2 — 3 November 2026
 
 **Status:** Preproduction design. The scaffold in this repository is a 3D technology preview, not the complete adventure.
 
@@ -131,3 +131,7 @@ The following documents are normative for implementation and resolve gaps in thi
 - [Production acceptance](PRODUCTION_ACCEPTANCE_V1_1.md): vertical slice, architecture, test gates and measured performance.
 
 **Conflict resolution:** when this introductory overview is less specific, follow the v1.1 implementation addenda. In particular, United Kingdom requires BLUEPRINT_FOUND, FORGE_RESTORED and trust of **all three** dragons. The early playable prototype Chalice is an isolated short test quest; the full story retrieves the real Chalice in the Black Castle. All numerical gameplay balancing values are provisional until tested.
+
+
+### 16. Second audit and conflict resolution (v1.2)
+Read [Consistency and implementation addendum v1.2](CONSISTENCY_AUDIT_V1_2.md) as the highest-priority ruleset where this overview or v1.1 addenda conflict. In particular, Chalice arrival at the Golden pedestal happens **before** ending selection; selection marks completion, not the reverse. The 20-room first playable prototype contains **three** optional secrets. All critical items need atomic ownership and reachable recovery. These are specification decisions, not claims about shipped mechanics.
