@@ -1,13 +1,14 @@
 # Music
 
-Drop looping MP3 files in this folder (`src/audio/`) with these exact names. The game fades between them automatically.
-Any file that is missing falls back to the built-in synthesized music.
+Looping MP3s named by mood, with any number of versions: `explore_1.mp3`, `explore_2.mp3`, `danger_1.mp3`, `boss_1.mp3` ...
+plus a single non-looping `ending.mp3`. Names are case-insensitive.
 
-| File | When it plays |
+| Mood | When it plays |
 |---|---|
-| `explore.mp3` | Exploring (default) |
-| `danger.mp3` | A dragon is chasing you (also used for the boss if `boss.mp3` is missing) |
-| `boss.mp3` | Shadow Sorcerer fight and the castle collapse escape |
-| `ending.mp3` | After you choose an ending |
+| `explore` | Exploring (default) |
+| `danger` | A dragon is chasing you (stays on for 5 seconds after the chase ends) |
+| `boss` | Shadow Sorcerer fight and the castle collapse escape (falls back to `danger`) |
+| `ending` | Plays once after you choose an ending, then exploration music returns |
 
-Keep each file loopable, about 1-3 minutes, and under ~3 MB (128 kbps MP3 is plenty).
+Each loop plays twice, then crossfades into a different version of the same mood. Moods crossfade over 1.5 seconds.
+If there are no files at all, the game uses its built-in synthesized music.

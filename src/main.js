@@ -115,36 +115,79 @@ const SFX = {
   zap: () => tone(1400, 0.25, 'sawtooth', 0.03, 300)
 };
 const sfx = k => { try { SFX[k]?.(); } catch (e) { /* audio unavailable */ } };
-// Optional music files (e.g. made with Suno) in src/audio/: explore, danger, boss, ending (.mp3).
-// Only files that exist at build time are bundled; anything missing falls back to the synth.
-const TRACKS = Object.fromEntries(Object.entries(import.meta.glob('./audio/*.mp3', { eager: true, query: '?url', import: 'default' }))
-  .map(([path, url]) => [path.split('/').pop().replace('.mp3', ''), url]));
-const tracks = {};
-let tracksReady = false;
-function loadTracks() {
-  if (tracksReady) return; tracksReady = true;
-  for (const [k, src] of Object.entries(TRACKS)) {
-    const a = new Audio(); a.loop = true; a.volume = 0; a.preload = 'auto';
-    a.addEventListener('canplaythrough', () => { tracks[k] = a; }, { once: true });
-    a.addEventListener('error', () => { delete tracks[k]; }, { once: true });
-    a.src = src;
-  }
+// Music files (made with Suno) live in src/audio/ as explore_N, danger_N, boss_N and ending .mp3.
+// Several versions per mood rotate with crossfades; anything missing falls back to the built-in synth.
+const MUSIC = {};
+for (const [path, url] of Object.entries(import.meta.glob('./audio/*.mp3', { eager: true, query: '?url', import: 'default' }))) {
+  const mood = path.split('/').pop().replace(/\.mp3$/i, '').toLowerCase().replace(/[_-]?\d+$/, '');
+  (MUSIC[mood] ||= []);
+  if (!MUSIC[mood].includes(url)) MUSIC[mood].push(url); // identical files share a URL
+}
+const HAS_MUSIC = Object.keys(MUSIC).length > 0;
+const buffers = {};
+const mus = { started: false, mood: null, url: null, src: null, gain: null, master: null, switchAt: 0, endingEl: null, endingDone: false };
+let lastDanger = -99;
+function loadBuffer(url) {
+  return (buffers[url] ||= fetch(url).then(r => r.arrayBuffer()).then(b => new Promise((res, rej) => ac().decodeAudioData(b, res, rej))).catch(() => null));
+}
+function startMusic() {
+  if (mus.started || !HAS_MUSIC || !ac()) return;
+  mus.started = true;
+  mus.master = audio.createGain(); mus.master.gain.value = 0.5; mus.master.connect(audio.destination);
+  (MUSIC.explore || []).forEach(loadBuffer); // warm up the first mood
 }
 function musicMood() {
-  if (state.ending) return 'ending';
-  if (bossActive() || collapseT > 0) return tracks.boss ? 'boss' : 'danger';
-  return danger > 0 ? 'danger' : 'explore';
+  if (danger > 0) lastDanger = gameTime;
+  if (state.ending && !mus.endingDone) return 'ending';
+  if (bossActive() || collapseT > 0) return 'boss';
+  return gameTime - lastDanger < 5 ? 'danger' : 'explore';
+}
+const resolveMood = m => MUSIC[m]?.length ? m : m === 'boss' && MUSIC.danger ? 'danger' : MUSIC.explore ? 'explore' : null;
+function playLoop(mood) {
+  const list = MUSIC[mood], options = list.length > 1 ? list.filter(u => u !== mus.url) : list;
+  const url = options[Math.floor(Math.random() * options.length)];
+  mus.url = url;
+  loadBuffer(url).then(buf => {
+    if (!buf || mus.mood !== mood || mus.url !== url) return;
+    const t = audio.currentTime, src = audio.createBufferSource(), g = audio.createGain();
+    src.buffer = buf; src.loop = true;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(1, t + 1.5);
+    src.connect(g); g.connect(mus.master); src.start(t);
+    fadeOutLoop();
+    mus.src = src; mus.gain = g;
+    mus.switchAt = t + buf.duration * (buf.duration < 30 ? 2 : 1); // two passes, then another version
+  });
+}
+function fadeOutLoop() {
+  if (!mus.src) return;
+  const t = audio.currentTime, { src, gain } = mus;
+  gain.gain.cancelScheduledValues(t); gain.gain.setValueAtTime(Math.max(gain.gain.value, 0.0001), t);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.5); src.stop(t + 1.6);
+  mus.src = mus.gain = null;
 }
 function music(dt) {
-  const mood = musicMood();
-  const pick = tracks[mood] || (mood === 'boss' && tracks.danger) || tracks.explore || null;
-  for (const a of Object.values(tracks)) {
-    const want = !muted && a === pick ? 0.45 : 0;
-    a.volume = Math.max(0, Math.min(1, a.volume + Math.sign(want - a.volume) * Math.min(dt * 0.6, Math.abs(want - a.volume))));
-    if (want > 0 && a.paused) a.play().catch(() => {});
-    if (want === 0 && a.volume === 0 && !a.paused) a.pause();
+  if (HAS_MUSIC && mus.started) {
+    const vol = muted ? 0 : paused ? 0.22 : 0.5;
+    mus.master.gain.setTargetAtTime(vol, audio.currentTime, 0.3);
+    const mood = musicMood();
+    if (mood === 'ending' && MUSIC.ending) {
+      if (!mus.endingEl) {
+        fadeOutLoop(); mus.mood = 'ending';
+        mus.endingEl = new Audio(MUSIC.ending[0]);
+        mus.endingEl.addEventListener('ended', () => { mus.endingDone = true; mus.endingEl = null; });
+        mus.endingEl.play().catch(() => { mus.endingDone = true; mus.endingEl = null; });
+      }
+      if (mus.endingEl) mus.endingEl.volume = muted ? 0 : 0.8;
+      return;
+    }
+    if (mus.endingEl) { mus.endingEl.pause(); mus.endingEl = null; }
+    if (!state.ending) mus.endingDone = false;
+    const want = resolveMood(mood === 'ending' ? 'explore' : mood);
+    if (want && want !== mus.mood) { mus.mood = want; playLoop(want); }
+    else if (want && mus.src && audio.currentTime > mus.switchAt && MUSIC[want].length > 1) { mus.switchAt = Infinity; playLoop(want); }
+    return;
   }
-  if (pick || paused) return;
+  if (HAS_MUSIC || paused) return;
   musicTimer -= dt; if (musicTimer > 0 || muted || !audio) return;
   const calm = [262, 294, 330, 392, 440, 523], tense = [220, 233, 262, 311, 330];
   const scale = danger > 0 ? tense : calm, f = scale[Math.floor(Math.random() * scale.length)];
@@ -745,7 +788,7 @@ function openOverlay(type, html) {
   o.querySelectorAll('[data-new]').forEach(b => { b.onclick = () => { if (type === 'title' || confirm('Start over? Your current adventure will be erased.')) { newGame(); closeOverlay(); } }; });
   o.querySelector('button:not([disabled])')?.focus();
 }
-function closeOverlay() { paused = false; overlayType = ''; $('overlay').classList.add('hidden'); $('overlay').innerHTML = ''; canvas.focus(); ac(); loadTracks(); }
+function closeOverlay() { paused = false; overlayType = ''; $('overlay').classList.add('hidden'); $('overlay').innerHTML = ''; canvas.focus(); ac(); startMusic(); }
 const CONTROLS = `<ul class="controls"><li><b>WASD / arrows</b> move · <b>Shift</b> sprint</li><li><b>E</b> interact · <b>Q</b> drop</li>
   <li><b>J</b> sword · <b>Space</b> dodge</li><li><b>Drag</b> to look around · <b>Wheel</b> zoom</li><li><b>F</b> map · <b>H</b> help · <b>M</b> sound · <b>Esc</b> pause</li></ul>`;
 function titleScreen() {
@@ -1049,6 +1092,7 @@ function boot() {
     prompt: () => interactions()?.label || null, interact: doInteract, attack: tryAttack,
     teleport(room, lx = 0, lz = 0) { const q = local(room, lx, lz); state.hero.x = q.x; state.hero.z = q.z; hero.position.set(q.x, 0, q.z); camera.target.set(q.x, 1.6, q.z); },
     give(id) { if (state.held) delete state.items[state.held]; state.held = id; state.items[id] = { owner: 'hero' }; },
+    music: () => ({ mood: mus.mood, url: mus.url ? mus.url.split('/').pop() : null, playing: !!mus.src, ending: !!mus.endingEl, files: Object.fromEntries(Object.entries(MUSIC).map(([k, v]) => [k, v.length])) }),
     room: () => roomAt(state.hero.x, state.hero.z), fps: () => engine.getFps(), scene: () => scene, glow: () => glow, shadows: () => shadows
   };
 }
