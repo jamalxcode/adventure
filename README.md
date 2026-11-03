@@ -4,21 +4,17 @@
 **Type:** Browser 3D third-person action-adventure  
 **Status:** Preproduction specification and GitHub Pages deployment scaffold, **not the finished game**.
 
-This repository contains the technical preview, 3D game design specification, asset production inventories, and GitHub Pages deployment workflow.
+The complete story, rules, art direction, enemy AI, gameplay, sound, browser/performance targets and architecture are in [the game design specification](docs/GAME_DESIGN_SPEC.md).
 
-## Development
+Supporting files include [deployment](docs/DEPLOYMENT.md), [acceptance tests](docs/ACCEPTANCE_TESTS.md), [asset inventory](assets/models/ASSET_MANIFEST.csv), [sound list](assets/audio/SOUND_CUES.csv) and [game text](src/text.json).
+
+## Developer preview
 
 ```bash
 npm install --no-audit --no-fund
 npm run dev
 ```
 
-Static build:
+Build: `npm run build`.
 
-```bash
-npm run build
-```
-
-Production engine: Babylon.js. Source language: JavaScript. Hosting: GitHub Pages. The starter scene uses procedural placeholder models and is not a complete playable game.
-
-See `docs/GAME_DESIGN_SPEC.md` for the full design.
+The preview uses procedural placeholder meshes. It is **not** complete gameplay. 3D assets and music must be produced separately. After the first install, commit `package-lock.json` and switch the workflow from `npm install` to `npm ci` for reproducible deployments.

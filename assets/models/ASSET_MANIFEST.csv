@@ -1,0 +1,27 @@
+id,kind,variant_or_animation,region,priority,format,notes
+player_hero,character,idle/walk/run/jump/pickup/drop/sword/celebrate,all,critical,glb,Original stylized rounded blocky avatar
+Yorgle,creature,idle/walk/sniff/collect/chase/confused,forest,critical,glb,Yellow treasure-loving dragon
+Grundle,creature,idle/patrol/charge/recoil/freed,White Castle,critical,glb,Green collared guardian dragon
+Rhindle,creature,patrol/investigate/chase/attack/fly,Black Castle,high,glb,Red hunter dragon
+Blinky,creature,fly/hover/grab/drop/taunt,all,critical,glb,Small expressive bat
+sorcerer,character,idle/cast/shield/concede,Black Castle,high,glb,Morally complex guardian
+stone_guardian,creature,idle/chase/stun,Ancient Mines,medium,glb,Ancient stone construct
+golden_castle,environment,modular towers/walls/gates/home,Golden Castle,critical,glb,Warm golden fortress
+white_castle,environment,marble halls/mirrors/doors,White Castle,critical,glb,Cool bright puzzle castle
+black_castle,environment,gloom towers/rooms/doors,Black Castle,high,glb,Atmospheric final fortress
+forest_set,environment,trees/bushes/rocks/path props,Forest,critical,glb,Optimized instanced pieces
+mine_set,environment,beams/rails/forge/wheel/rocks,Ancient Mines,high,glb,Industrial magic tunnels
+watchtower,environment,stone tower/hoard/workshop,Watchtower,high,glb,Recognizable bat home
+sword,item,carried/drop,all,critical,glb,Readable silhouette
+key_gold,item,carried/drop,Golden Castle,critical,glb,Gold and symbol
+key_white,item,carried/drop,White Castle,critical,glb,White and symbol
+key_black,item,carried/drop,Black Castle,high,glb,Black and symbol
+magnet,item,carried/drop,all,high,glb,Strong visual magnet cue
+magic_bridge,item,carried/deployed,all,high,glb,Portable wall crossing
+crystal_truth,item,carried/activated,White Castle,high,glb,Visual revealing power
+shadow_cloak,item,carried/activated,Black Castle,medium,glb,Temporary stealth visual
+chalice,item,carried/on pedestal,all,critical,glb,Main glowy quest artifact
+prop_mirror,interactive,rotate/beam reflector,White Castle,high,glb,Puzzle piece
+prop_switch,interactive,on/off,all,critical,glb,Reusable lever plate
+prop_rock,interactive,breakable/rolling,all,high,glb,Chain reaction prop
+prop_treasure,interactive,shiny,all,high,glb,Dragon and bat bait
