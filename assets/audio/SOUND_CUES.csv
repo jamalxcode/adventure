@@ -1,10 +1,10 @@
 id,type,scene_or_event,description,priority,loop,formats
 music_title,music,main menu,Curious uplifting fantasy theme,high,yes,ogg/mp3
-music_home,music,Golden Castle,Warm triumphant pastoral theme,high,yes,ogg/mp3
+music_home,music,Sun Castle,Warm triumphant pastoral theme,high,yes,ogg/mp3
 music_forest,music,Whispering Forest,Playful mysterious woodland theme,high,yes,ogg/mp3
-music_white,music,White Castle,Glass chimes and subtle magical pulse,medium,yes,ogg/mp3
+music_white,music,Frost Castle,Glass chimes and subtle magical pulse,medium,yes,ogg/mp3
 music_mines,music,Ancient Mines,Mechanical percussion and warm resonance,medium,yes,ogg/mp3
-music_black,music,Black Castle,Dark mysterious restrained strings,high,yes,ogg/mp3
+music_black,music,Shadow Castle,Dark mysterious restrained strings,high,yes,ogg/mp3
 music_chase,music,dragon pursuit,Adaptive urgent loop with clean ending,high,yes,ogg/mp3
 music_sorcerer,music,final confrontation,Layered magical theme that grows in tension,high,yes,ogg/mp3
 music_homecoming,music,return journey,Hopeful reprise of home theme,high,yes,ogg/mp3
@@ -18,12 +18,12 @@ sfx_magnet,sfx,magnet,Low oscillating magical pull,medium,yes,ogg/mp3
 sfx_bridge,sfx,bridge placement,Wood and magical construct opening,medium,no,ogg/mp3
 sfx_secret,sfx,secret discovery,Short delightful three note flourish,high,no,ogg/mp3
 sfx_checkpoint,sfx,sanctuary,Soft resonant success note,high,no,ogg/mp3
-sfx_yorgle,sfx,Yorgle,Playful sniff chirp and low growl,high,no,ogg/mp3
-sfx_grundle_charge,sfx,Grundle,Readable warning grunt before charge,high,no,ogg/mp3
-sfx_rhindle_roar,sfx,Rhindle,Distinct threatening distant roar,high,no,ogg/mp3
-sfx_blinky_flap,sfx,Blinky,Soft quick wing flutters,high,no,ogg/mp3
-sfx_blinky_theft,sfx,Blinky,Cheeky upward squeak and flutter,high,no,ogg/mp3
-sfx_chalice,sfx,Chalice proximity,Gentle magical harmonic shimmer,high,yes,ogg/mp3
+sfx_Gold Dragon,sfx,Gold Dragon,Playful sniff chirp and low growl,high,no,ogg/mp3
+sfx_Green Dragon_charge,sfx,Green Dragon,Readable warning grunt before charge,high,no,ogg/mp3
+sfx_Red Dragon_roar,sfx,Red Dragon,Distinct threatening distant roar,high,no,ogg/mp3
+sfx_Karl the Kameleon_flap,sfx,Karl the Kameleon,Soft quick wing flutters,high,no,ogg/mp3
+sfx_Karl the Kameleon_theft,sfx,Karl the Kameleon,Cheeky upward squeak and flutter,high,no,ogg/mp3
+sfx_Dragon Crown,sfx,Dragon Crown proximity,Gentle magical harmonic shimmer,high,yes,ogg/mp3
 sfx_rockfall,sfx,collapse,Stone rumble plus impact layers,medium,no,ogg/mp3
 sfx_ui_select,sfx,menu,Soft focus tick,high,no,ogg/mp3
 sfx_ui_confirm,sfx,menu,Clean confirm pluck,high,no,ogg/mp3

@@ -1,57 +1,71 @@
-# Adventure: The Lost Chalice
+# The Three Dragons
 
-A standalone, original, browser-based fantasy action-adventure inspired by the exploration and emergent item play of the Atari classic. Stylized rounded-block **3D** characters and scenery, not Atari-sized pixels.
+An original low-poly 3D fantasy adventure that runs in the browser. Explore the kingdom of Atheon, solve puzzles,
+outwit Karl the Kameleon, and decide the fate of the Gold, Green and Red Dragons: fight them, or win their trust.
 
-## Current release: v0.2 playable prototype
+**Play:** https://adventure.sala.company
 
-The repository now contains a **playable, procedural 20-location adventure prototype** with keyboard and experimental touch controls. Explore Golden Garden, the Whispering Forest, White Castle, Ancient Mines and Black Castle. Collect keys and tools, meet Yorgle, Grundle, Rhindle and Blinky, discover clues, overcome three seals, recover the Enchanted Chalice and choose among three endings.
+## Current release: v0.3 playable
 
-The prototype uses generated low-poly meshes and short synthesized sound cues. It is not the finished polished 80–100 room game with authored animated GLB characters and full soundtrack. See [implementation status](docs/IMPLEMENTATION_STATUS.md) for feature-by-feature accuracy.
+- **20 connected areas** with solid walls, doorways, locked castle gates, a river you bridge, a cracked wall and a light-sealed door.
+- **Three dragons** that see (they look where they face), hear you sprint, chase you between rooms, warn before striking (yellow then red marker), give up when you hide in tall grass, and can be fought (3 hits) or befriended.
+- **Karl the Kameleon**, a nearly invisible thief who steals what you carry and runs to his lookout. The Crystal of Truth reveals him.
+- **Real puzzles:** a Mirror Hall light-beam puzzle (two solutions), forge levers whose order changes per save, a river crossing, and luring the Green Dragon into the cracked wall.
+- **Finale:** a Shadow Sorcerer boss (dodge shadow orbs, break three pylons), a castle-collapse escape with the Red Dragon in pursuit, and three endings.
+- Dodge roll, sword combat with animation, interaction prompts, sanctuary checkpoint, three secrets.
+- Saves in the browser with automatic backup; touch controls with analog stick; quality adapts to slower devices.
+- Optional music files (for example made with Suno) in `src/audio/`; see [src/audio/README.md](src/audio/README.md).
 
-## Run locally
+See [what's implemented](docs/IMPLEMENTATION_STATUS.md) and the [play guide](docs/PLAY_GUIDE.md) (spoilers).
 
-Node 22 is recommended.
+## Controls
+
+| Action | Keyboard | Touch |
+|---|---|---|
+| Move / sprint | WASD or arrows / Shift | Stick (push fully to sprint) |
+| Interact | E | USE |
+| Sword | J | SWORD |
+| Dodge | Space | DODGE |
+| Drop | Q | DROP |
+| Look around / zoom | Drag mouse / wheel | Drag the scene / pinch |
+| Map, help, sound, pause | F, H, M, Esc | MAP, HELP |
+
+## Develop
+
+Node 22 recommended.
 
 ```bash
 npm install --no-audit --no-fund
 npm run dev
 ```
 
-Open the URL printed by Vite. Validate before release:
+Before pushing:
 
 ```bash
 npm test
 npm run build
-npm run preview
 ```
 
-Controls: WASD/arrows move, Shift sprint, E interact, Q drop, J attack while carrying sword, F map, H help, M mute, Escape pause. Move mouse/touch on canvas to orbit camera. On touch devices, use the virtual stick and action buttons.
+Optional real-browser playtest (needs Playwright with Chromium): run `npm run preview` in one terminal, then:
 
-[How to play and solve the prototype](docs/PLAY_GUIDE.md)
+```bash
+npm run test:browser -- http://localhost:4173/
+```
 
-## Specifications and production
-
-- [Full story, gameplay and technical design](docs/GAME_DESIGN_SPEC.md)
-- [Detailed combat, item, enemy and save rules](docs/GAMEPLAY_RULES_V1_1.md)
-- [Consistency and state machine fixes](docs/CONSISTENCY_AUDIT_V1_2.md)
-- [Visual, sound and interface bible](docs/ART_AUDIO_UI_BIBLE.md)
-- [20-room prototype plan and acceptance criteria](docs/PRODUCTION_ACCEPTANCE_V1_1.md)
-- [What's actually implemented](docs/IMPLEMENTATION_STATUS.md)
-- [QA checklist](docs/ACCEPTANCE_TESTS.md)
+Pushing to `main` runs the tests and deploys to GitHub Pages ([deployment notes](docs/DEPLOYMENT.md)).
 
 ## Code structure
 
-- `src/main.js`: original procedural 3D scene, input, quests, objects, creatures, HUD and play loop.
-- `src/rules.mjs`: pure, testable story ending, trust and inventory invariants.
-- `tests/game.test.mjs`: automated rules and project smoke tests.
-- `src/style.css`: responsive game UI.
-- `index.html`: game canvas and controls.
-- `assets/`: asset inventories, with final GLB and audio production still pending.
+| File | What it does |
+|---|---|
+| `src/world.mjs` | Map: rooms, doors, walls, river, props, hiding spots, room-to-room navigation |
+| `src/physics.mjs` | Circle-vs-box collision with sliding |
+| `src/ai.mjs` | Dragon and Karl state machines (sight, hearing, chase, windup, strike, return, friendly) |
+| `src/puzzles.mjs` | Mirror beam tracing and forge lever order |
+| `src/rules.mjs` | Endings, trust, inventory and objective rules |
+| `src/models.js` | Procedural characters with jointed limbs and animation |
+| `src/main.js` | Babylon.js scene, game loop, interactions, boss, escape, HUD, saving, input |
+| `tests/game.test.mjs` | Unit tests for all the pure modules (`.mjs` files) |
+| `tests/browser-playtest.cjs` | Plays through the whole story in a real browser |
 
-Development uses Babylon.js, Vite, HTML, CSS and JavaScript. GitHub Pages deployment runs `npm test` and `npm run build` prior to publishing.
-
-## Persistence and caveats
-
-Current prototype stores saves in localStorage in this browser and may lose progress if browser storage is cleared. The specification calls for versioned IndexedDB and JSON export/import for the full game.
-
-This game uses original designs and does not incorporate Roblox or Atari copyrighted game assets.
+All characters, names, art and story are original to this project.

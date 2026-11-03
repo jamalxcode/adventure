@@ -1,9 +1,11 @@
+> **Archived design notes** from the v0.1–v0.2 prototype (names updated to The Three Dragons). Parts of this no longer match the game; see the [README](../../README.md), [play guide](../PLAY_GUIDE.md) and [implementation status](../IMPLEMENTATION_STATUS.md) for what is actually built.
+
 # Production Roadmap and Quality Gates v1.1
 
 This is a build plan, not a claim that systems are already implemented.
 
 ## First playable vertical slice
-Twenty interconnected rooms: Golden gardens (4), Golden Castle (4), Forest (6), White Castle perimeter (4), Watchtower (2). Deliver third-person movement and camera, collisions, keys and doors, one-item pick-up/drop/swap, Yorgle and Grundle patrols, Blinky object theft and recovery, sanctuary autosave and reload, one environmental puzzle, a secret, a non-combat route and a short prototype Chalice recovery. The prototype Chalice appears early as a test objective; in the actual story it is retrieved at Black Castle.
+Twenty interconnected rooms: Golden gardens (4), Sun Castle (4), Forest (6), Frost Castle perimeter (4), Watchtower (2). Deliver third-person movement and camera, collisions, keys and doors, one-item pick-up/drop/swap, Gold Dragon and Green Dragon patrols, Karl the Kameleon object theft and recovery, sanctuary autosave and reload, one environmental puzzle, a secret, a non-combat route and a short prototype Dragon Crown recovery. The prototype Dragon Crown appears early as a test objective; in the actual story it is retrieved at Shadow Castle.
 
 ## Implementation modules
 App state, scene loading, third-person camera, input mapping, movement, object registry, interaction, inventory, quest event graph, creature AI/navigation, puzzles, save schema/migrations, UI, audio, graphics quality settings, seed generator and solvability validator. Use modular JavaScript and data-driven JSON with stable identifiers. The existing src/main.js procedural preview must be replaced or refactored, not mistaken for completed gameplay.
@@ -14,7 +16,7 @@ Each region provides a unique ID, named connected exits, player entry locations,
 ## Acceptance criteria
 - Fresh desktop player can complete tutorial and first objective without manual.
 - Keys remain obtainable after theft, dropping, death, and region unload.
-- Grundle freed and defeated branches both reach mines.
+- Green Dragon freed and defeated branches both reach mines.
 - Sorcerer encounter is completable without Crystal of Truth.
 - Old ending always available; Free requires blueprint; United requires blueprint, forge, and trust of all three dragons.
 - Save and load retain player, doors, creatures, object holders, location, inventory and narrative choices.

@@ -1,34 +1,34 @@
-# Adventure: The Lost Chalice — Play Guide
+# Play guide (spoilers)
 
-## Current playable prototype (v0.2)
-This is a lightweight, original, procedural 3D game rather than the finished bespoke-asset 100-room release. It has **20 named interconnected outdoor/room zones**, three simple animated dragon creatures, Blinky, three collectible keys, sword strikes, optional discoveries, the Sorcerer's three seals, a recoverable Chalice and three endings. Save data is kept in the current browser's localStorage. Production-quality GLB models, detailed interiors, animation rigs, advanced navigation meshes and cinematic audio remain to be created.
+## Map
 
-## Controls
-- WASD or arrow keys: move; Shift: move faster.
-- Drag mouse/touch on 3D view: orbit camera; wheel: zoom.
-- E or Interact button: pick up, examine, use nearby object, open gate or activate puzzle.
-- Q or Drop button: put down the one carried item.
-- J or Sword button: attack a nearby dragon when holding the sword.
-- F or Map button: read the 5-by-4 kingdom map.
-- H or Help button: controls and objective.
-- Escape: pause; M: toggle simple synthesized sound.
-- On touch screens use the movement joystick and action buttons. Touch control is experimental; this is not a fully mobile-optimized release.
+| | West | | | | East |
+|---|---|---|---|---|---|
+| **North** | Golden Garden | Sun Castle | Sunlit Meadow | Forest Gate | Whispering Woods |
+| | Training Yard | Gold Dragon's Nest | Karl's Lookout | Frost Gate | Frost Castle |
+| | River Bank | Old Quarry | Mine Entrance | Ancient Forge | Mirror Hall |
+| **South** | Hidden Path | Stone Archive | Shadow Road | Shadow Gate | Shadow Castle |
 
-## Guided route to the Chalice
-1. Golden Garden: pick up gold key. Move to Golden Castle and interact near the gold gate.
-2. Golden Castle: activate sanctuary at its pedestal.
-3. Yorgle's Nest: examine collar for first story clue. Optional: carry treasure to collar interaction to earn Yorgle trust.
-4. Blinky's Watchtower: pick up white key. If Blinky steals an object, look for it here.
-5. White Gate / White Castle: use white key at castle gate or investigate cracked wall near White Gate. Examine mural.
-6. Mirror Hall: rotate mirrors to free Grundle if alive.
-7. Stone Archive: read Chalice blueprint. Ancient Forge: restore forge for the United Kingdom ending.
-8. Mine Entrance: collect black key. Shadow Road and Black Gate: activate two seals.
-9. Black Castle: use black key at castle gate, confront Sorcerer to disable third seal, then take Chalice from pedestal.
-10. On the way home, if you have blueprint and Chalice, interact near the Rhindle symbol in Black Gate to earn his trust, provided he is alive.
-11. Bring Chalice back to Golden Castle pedestal and pick a story ending.
+## Walkthrough
 
-## Endings
-Old Kingdom available when Chalice arrives; Age of Dragons needs blueprint; United Kingdom needs blueprint + forge + all three dragon trust flags. Defeating a dragon makes that dragon's trust unavailable in that run. Start a new adventure from pause menu to try different outcomes.
+1. **Sun Key** is in the Golden Garden. Unlock the Sun Castle gate (east of the garden) and touch the pedestal: this is your sanctuary (respawn point, healing).
+2. **Sword** is in the Training Yard (south of the garden).
+3. Go through the **Gold Dragon's Nest**. Sneak through the tall grass, or run. The **Frost Key** is at Karl's Lookout next door.
+4. Open **Frost Castle** from Frost Gate. Alternative: lure the Green Dragon to the cracked wall in Whispering Woods and let it strike near the wall.
+5. Read the **mural** in Frost Castle, then go south to the **Mirror Hall**. Turn mirrors until the beam hits the crystal (turning the centre mirror and the south mirror works). This frees the Green Dragon, reveals the **Crystal of Truth**, and opens the way to the Forge.
+6. Carry the crystal to the **shadow seals** on Shadow Road and at Shadow Gate. Watch out for Karl: the crystal reveals him.
+7. The **Shadow Key** is in the Mine Entrance. Open Shadow Castle from Shadow Gate.
+8. **Boss:** dodge the orbs (Space) and break the three pylons. Take the **Dragon Crown** and run home while the castle collapses.
+9. Place the crown on the Sun Castle pedestal and choose an ending.
 
-## Current limitations
-Dragon pursuit is local and simplified, not a complete navigation-mesh AI. Castle gates are interaction objectives but not fully modeled as enclosed 3D interiors. Story content is conveyed through the status text, not voice-acted cutscenes. Sword hit is a short proximity action, not final animation-based combat. World save is localStorage, while versioned IndexedDB is still the production requirement. The future Adventure Chaos seeded mode and polished soundtracks are not implemented. The ending is playable as UI, not an authored 3D epilogue. Browser compatibility and frame rates must be verified on real target devices.
+## Better endings
+
+- **Free the dragons:** read the blueprint in the Stone Archive.
+- **Form a new pact:** also restart the Ancient Forge (pull the levers in the order written on the Stone Archive tablet) and befriend all three dragons:
+  - **Gold:** lay the Bridge Plank (Old Quarry) across the river, fetch the Dragon Gold from the Hidden Path, and give it back.
+  - **Green:** solve the Mirror Hall while it is alive.
+  - **Red:** with the blueprint read, show it the crown during your escape.
+
+## Secrets
+
+Whispering Woods (north-east corner), River Bank (north bank, west), Hidden Path (south-west corner).

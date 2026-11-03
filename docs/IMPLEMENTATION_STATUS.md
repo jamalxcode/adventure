@@ -1,45 +1,24 @@
-# Implementation status, 2026-11-03
+# Implementation status (v0.3)
 
-Legend: DONE = present in code, PARTIAL = simplified/procedural, PLANNED = specification only, UNVERIFIED = requires real browser/build verification.
+| Area | Status | Notes |
+|---|---|---|
+| World | Done for prototype | 20 rooms, walls and doorways, 3 gated castles, cracked wall, light seal, river and bridge |
+| Collision | Done | Hero, dragons and Karl collide with walls, props, trees, river; hero can't walk through dragons. No jumping or falling yet |
+| Camera | Done | Orbit/zoom, smooth follow, walls and trees between camera and hero fade out |
+| Hero | Done | Jointed model, walk/sprint/attack/dodge animations, carried item shown in hand |
+| Dragons | Done | Sight cone, hearing, line of sight, hiding in grass, chase across rooms, telegraphed strikes, stun, 3-hit defeat, return home, friendship |
+| Karl the Kameleon | Done | Camouflage, stalking, stealing, stashing at lookout, revealed by crystal, sword makes him drop items |
+| Puzzles | Done | Mirror beam (2 solutions), forge levers (order per save), river bridge, cracked wall via Green Dragon |
+| Story | Done | Objectives, mural, blueprint, seals, Sorcerer boss, crown, collapse escape with Red Dragon pursuit, 3 endings, 3 secrets |
+| Saving | Basic | localStorage with backup copy; no multiple slots or export yet |
+| Audio | Basic | Synth effects and generative music; drop-in support for custom music files |
+| Touch | Basic | Analog stick, action buttons; needs testing on real phones |
+| Performance | Basic | Adaptive resolution and glow; not yet measured on real phones |
+| Tests | Done | 24 unit tests; full-story browser playtest script |
 
-| Capability | Status | Notes |
-| --- | --- | --- |
-| 3D renderer | DONE | Babylon.js procedural scene |
-| 20 labeled regions | DONE | Continuous world sectors, not 20 authored interior rooms |
-| Camera orbit/zoom | DONE | ArcRotateCamera; advanced occlusion PLANNED |
-| Keyboard controls | DONE | WASD/arrows, interaction, drop, sprint, map, help, attack |
-| Touch buttons/joystick | PARTIAL | Prototype pointer movement |
-| Character models | PARTIAL | Generated meshes; no imported GLB rigs |
-| Item pickup/drop | DONE | One carried object, tracked in local save |
-| Golden/White/Black keys | DONE | Lock interaction objectives |
-| Alternate White entrance | PARTIAL | Scripted cracked-wall interaction |
-| Yorgle/Grundle/Rhindle | PARTIAL | Simple patrolling/chase and proximity damage |
-| Dragon trust outcomes | PARTIAL | Three authored trust flags and decisions |
-| Blinky theft | PARTIAL | Returns stolen item to watchtower, with cooldown |
-| Sword combat | PARTIAL | J or Sword button, proximity attack |
-| Mine, mirror, mural, forge | PARTIAL | Text-based interactions on 3D landmarks |
-| Sorcerer | PARTIAL | Three seal interactions, no 3D boss rig |
-| Chalice quest | DONE | Collect and return within short prototype |
-| Three endings | DONE | Eligibility and UI consequence text |
-| Playable epilogue | PARTIAL | Exploration continues; no bespoke epilogue scenes |
-| Secrets | DONE | Three interactable discoveries |
-| Saving | PARTIAL | Browser localStorage; IndexedDB/migrations planned |
-| Sound | PARTIAL | Short original oscillator cues; music planned |
-| Accessibility | PARTIAL | Keyboard buttons and status; full testing planned |
-| 100-room production content | PLANNED | Out of current vertical slice |
-| Adventure Chaos | PLANNED | No seeded generator yet |
-| Build on clean install | UNVERIFIED | GitHub Actions configured; no local npm dependencies available in this session |
-| Browser/device QA | UNVERIFIED | Must test in actual browsers |
+## Not done yet
 
-## Technical debts
-- Add navigation mesh/real 3D collisions, floor transitions and camera collision; current character can pass through scenery.
-- Replace proximity damage with telegraphed combat and animation timings.
-- Add player jump physics and proper sprint animation.
-- Replace static room labels with complete connected indoor rooms, authored puzzles and optional shortcuts.
-- Make bat steal behaviors observable and interruptible with waypoint motion rather than instant object relocation.
-- Implement versioned IndexedDB snapshots, migrations and export/import.
-- Replace primitive characters with original textured animated GLB models and original complete music/sound assets.
-- Add automated state-graph, quest-chain and seed solvability tests.
-- Test the build and gameplay on Chrome, Safari, Edge, Firefox and mobile, then fix issues found.
-
-Do not describe any PARTIAL or PLANNED feature as fully delivered.
+- Detailed authored 3D models (characters are built from shapes)
+- More rooms (target 80-100), interiors, stairs, jumping
+- Multiple save slots, export/import, control remapping, subtitles beyond the message bar
+- Real-phone performance testing

@@ -1,3 +1,5 @@
+> **Archived design notes** from the v0.1–v0.2 prototype (names updated to The Three Dragons). Parts of this no longer match the game; see the [README](../../README.md), [play guide](../PLAY_GUIDE.md) and [implementation status](../IMPLEMENTATION_STATUS.md) for what is actually built.
+
 # Test Matrix and Acceptance Tests
 
 ## Deployment
@@ -17,9 +19,9 @@
 - [ ] Single major item carry enforced
 - [ ] Bat theft, fall and death never delete required items
 - [ ] Dragons have visible warnings and escapable chase
-- [ ] Multiple approaches to White Castle
+- [ ] Multiple approaches to Frost Castle
 - [ ] Sanctuary, shortcuts and story flags survive save/reload
-- [ ] Grundle death or release cannot softlock mines
+- [ ] Green Dragon death or release cannot softlock mines
 - [ ] Sorcerer fight has non-precision solutions
 - [ ] Three endings trigger only when requirements met
 - [ ] Randomized level seed solvability validator rejects locks

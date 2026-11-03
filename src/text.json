@@ -1,9 +1,4 @@
 {
-  "meta": {"locale": "en", "title": "Adventure: The Lost Chalice"},
-  "menu": {"play": "New Adventure", "continue": "Continue", "settings": "Settings", "credits": "Credits", "quit": "Exit to Menu"},
-  "opening": ["THE CHALICE IS LOST.", "THE KINGDOM IS FALLING.", "BRING IT HOME."],
-  "tutorial": {"move": "Move with WASD. Look around with the mouse.", "interact": "Press E to pick up or use something.", "carry": "You can carry only one large object at a time.", "drop": "Press Q to drop your item."},
-  "prompts": {"interact": "Press E to interact", "fullHands": "Your hands are full. Drop your item first.", "batTheft": "Blinky made off with your {item}! Follow him or lure him back.", "checkpoint": "Sanctuary activated. Progress saved.", "keyFound": "A key! What does it open?", "dragonClue": "These aren't ordinary collars. Someone made the dragons obey.", "blueprint": "The Chalice can protect the kingdom without binding the dragons."},
-  "ending": {"old": "Restore the old magic", "free": "Free the dragons", "united": "Build a new pact", "complete": "ADVENTURE COMPLETE"},
-  "errors": {"webgl": "3D graphics are unavailable in this browser or device. Try a current version of Chrome, Edge, Safari, or Firefox with hardware acceleration enabled.", "storage": "Your browser cannot save progress right now. You can still play, but your progress may be lost."}
+  "meta": {"locale": "en", "title": "The Three Dragons"},
+  "note": "Player-facing text currently lives in src/main.js; this file is reserved for future localisation."
 }
