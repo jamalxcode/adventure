@@ -26,3 +26,8 @@ The preview uses procedural placeholder meshes. It is **not** complete gameplay.
 - [Vertical slice scope, production roadmap and acceptance tests](docs/PRODUCTION_ACCEPTANCE_V1_1.md)
 
 These documents define how to implement the game. The current scene is a technology preview, not a completed game. Gameplay tuning values are provisional and require player testing.
+
+
+## Second design audit (v1.2)
+
+- [Consistency and implementation addendum v1.2](docs/CONSISTENCY_AUDIT_V1_2.md) resolves endgame state ordering, dragon-trust conditions, object transfers, finale checkpoints, random seed solvability, player feedback and preview limitations. This addendum supersedes conflicting earlier clauses.
